@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Shaka Player ui compiled library default CSS: -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/controls.css' %}">
+    <!-- Chromecast SDK (if you want Chromecast support for your app): -->
+    
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'js/Main.js' %}"></script>
+    <script defer src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+    <script src="https://github.com/videojs/mux.js/releases/download/v5.0.0/mux.js"></script>
+    <!-- Shaka Player ui compiled library: -->
+    <script src="{% static 'js/shaka-player-ui.js' %}"></script>
+    <script src="{% static 'js/shaka-player.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/mux.js@4.4.0/dist/mux.min.js"></script> -->
+  </head>
+  <body>
+    {% block content %}
+    <a href="{% url 'upload' %}">Upload Video</a> <br>
+    <a href="{% url 'live' %}">Live Stream</a>  <br>
+    <a href="{% url 'liveVideo' %}">Live Stream Using VideoJs</a>
+    <br><br><br>
+
+    <div data-shaka-player-container style="max-width:40em" data-shaka-player-cast-receiver-id="7B25EC44">
+      <video data-shaka-player id="videos" style="width:100%;height:100%"></video>
+    </div>
+
+    <div id="videosDiv">
+      <!-- <div data-shaka-player-container style="max-width:40em" data-shaka-player-cast-receiver-id="7B25EC445">
+        <video data-shaka-player id="video_0" style="width:100%;height:100%"></video>
+      </div> -->
+    </div>
+ 
+    {% endblock %}
+  </body>
+  <script>
+        async function init() {
+            // var dic = videos();
+            // console.info(dic)
+            // var manifestUri = dic.url;
+            var manifestUri = '{% static "streamOutput/apple.m3u8" %}';
+            // var manifestUri = 'http://192.168.1.38/hls/live/index.m3u8';
+            // When using the UI, the player is made automatically by the UI object.
+            // const video = videoId;
+            const video = document.getElementById('videos');
+            const ui = video['ui'];
+            const controls = ui.getControls();
+            const player = controls.getPlayer();
+
+            // Listen for error events.
+            player.addEventListener('error', onPlayerErrorEvent);
+            controls.addEventListener('error', onUIErrorEvent);
+            controls.addEventListener('caststatuschanged', onCastStatusChanged);
+            // Try to load a manifest.
+            // This is an asynchronous process.
+            try {
+                await player.load(manifestUri);
+                // This runs if the asynchronous load is successful.
+                console.log('The video has now been loaded!');
+            } catch (error) {
+                onPlayerError(error);
+            }
+        }
+      
+        function onPlayerErrorEvent(errorEvent) {
+            // Extract the shaka.util.Error object from the event.
+            onPlayerError(event.detail);
+        }
+
+        function onPlayerError(error) {
+            // Handle player error
+            console.error('Error code', error.code, 'object', error);
+        }
+
+        function onUIErrorEvent(errorEvent) {
+            // Extract the shaka.util.Error object from the event.
+            onPlayerError(event.detail);
+        }
+
+        function initFailed() {
+            // Handle the failure to load
+            console.error('Unable to load the UI library!');
+        }
+
+        function onCastStatusChanged(event) {
+          const newCastStatus = event['newStatus'];
+          // Handle cast status change
+          console.log('The new cast status is: ' + newCastStatus);
+        }
+
+        // Listen to the custom shaka-ui-loaded event, to wait until the UI is loaded.
+        // document.addEventListener('shaka-ui-loaded', function(){ init(playerId, fileUrl); }, false);
+        document.addEventListener('shaka-ui-loaded', init);
+        // Listen to the custom shaka-ui-load-failed event, in case Shaka Player fails
+        // to load (e.g. due to lack of browser support).
+        //document.addEventListener('shaka-ui-load-failed', initFailed);
+        
+  </script>
+</html>

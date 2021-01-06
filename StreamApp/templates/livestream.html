@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome to Live Stream!</title>
+        <style>
+            body {
+                width: 35em;
+                margin: 0 auto;
+                font-family: Tahoma, Verdana, Arial, sans-serif;
+            }
+        </style>
+        <!-- jQuery is required! -->
+        <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <script src="https://cdn.plyr.io/2.0.3/plyr.js"></script> -->
+        <!-- <script src="//cdn.streamroot.io/hlsjs-dna-wrapper/1/stable/hlsjs-dna-wrapper.js"></script> -->
+        <!-- <script src="http://jwpsrv.com/library/4+R8PsscEeO69iIACooLPQ.js"></script> -->
+        <script src="//cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+        <!-- <script src="{% static 'js/level-selector.min.js' %}"></script> -->
+    </head>
+    <body>
+        <p><a href="{% url 'home' %}">Return to home</a></p> <br>
+        <div id="player" style="width:100%"></div>
+        <!-- <video id="video" width="100%" controls ></video> -->
+    <script>
+        var player = new window.Clappr.Player({
+            // this is an example url - for this to work you'll need to generate fresh token
+            source: 'http://192.168.1.38/hls/stream/index.m3u8',
+            // source: '{% static "streamOutput/apple.m3u8" %}',
+            parentId: '#player',
+        });
+
+
+        // jwplayer("player").setup({
+        //     file: "http://192.168.1.38/hls/watch/index.m3u8",
+        //     width: "530",
+        //     height: "300",
+        //     primary: "html",
+        // });
+        // var config = {
+        //     autoStartLoad: true,
+        //     startPosition: -1,
+        //     debug: false,
+        //     capLevelOnFPSDrop: false,
+        //     capLevelToPlayerSize: false,
+        //     defaultAudioCodec: undefined,
+        //     initialLiveManifestSize: 1,
+        //     maxBufferLength: 30,
+        //     maxMaxBufferLength: 600,
+        //     maxBufferSize: 60*1000*1000,
+        //     maxBufferHole: 0.5,
+        //     lowBufferWatchdogPeriod: 0.5,
+        //     highBufferWatchdogPeriod: 3,
+        //     nudgeOffset: 0.1,
+        //     nudgeMaxRetry: 3,
+        //     maxFragLookUpTolerance: 0.25,
+        //     liveSyncDurationCount: 3,
+        //     liveMaxLatencyDurationCount: Infinity,
+        //     enableWorker: true,
+        //     enableSoftwareAES: true,
+        //     manifestLoadingTimeOut: 10000,
+        //     manifestLoadingMaxRetry: 1,
+        //     manifestLoadingRetryDelay: 1000,
+        //     manifestLoadingMaxRetryTimeout: 64000,
+        //     startLevel: undefined,
+        //     levelLoadingTimeOut: 10000,
+        //     levelLoadingMaxRetry: 4,
+        //     levelLoadingRetryDelay: 1000,
+        //     levelLoadingMaxRetryTimeout: 64000,
+        //     fragLoadingTimeOut: 20000,
+        //     fragLoadingMaxRetry: 6,
+        //     fragLoadingRetryDelay: 1000,
+        //     fragLoadingMaxRetryTimeout: 64000,
+        //     startFragPrefetch: false,
+        //     fpsDroppedMonitoringPeriod: 5000,
+        //     fpsDroppedMonitoringThreshold: 0.2,
+        //     appendErrorMaxRetry: 3,
+        //     // loader: customLoader,
+        //     // fLoader: customFragmentLoader,
+        //     // pLoader: customPlaylistLoader,
+        //     // xhrSetup: XMLHttpRequestSetupCallback,
+        //     // fetchSetup: FetchSetupCallback,
+        //     // abrController: AbrController,
+        //     // bufferController: BufferController,
+        //     // capLevelController: CapLevelController,
+        //     // fpsController: FPSController,
+        //     // timelineController: TimelineController,
+        //     enableWebVTT: true,
+        //     enableCEA708Captions: true,
+        //     stretchShortVideoTrack: false,
+        //     maxAudioFramesDrift: 1,
+        //     forceKeyFrameOnDiscontinuity: true,
+        //     abrEwmaFastLive: 3.0,
+        //     abrEwmaSlowLive: 9.0,
+        //     abrEwmaFastVoD: 3.0,
+        //     abrEwmaSlowVoD: 9.0,
+        //     abrEwmaDefaultEstimate: 500000,
+        //     abrBandWidthFactor: 0.95,
+        //     abrBandWidthUpFactor: 0.7,
+        //     abrMaxWithRealBitrate: false,
+        //     maxStarvationDelay: 4,
+        //     maxLoadingDelay: 4,
+        //     minAutoBitrate: 0,
+        //     emeEnabled: false,
+        //     widevineLicenseUrl: undefined,
+        //     // requestMediaKeySystemAccessFunc: requestMediaKeySystemAccess
+        // };
+
+
+            // var video = document.getElementById('video');
+            // if(Hls.isSupported()) {
+            //     var hls = new Hls();
+            //     hls.loadSource('http://192.168.1.38/hls/live/index.m3u8');
+            //     hls.attachMedia(video);
+
+            //     hls.on(Hls.Events.MANIFEST_PARSED,function() {
+            //         video.play();
+            //     });
+            // }
+            // hls.js is not supported on platforms that do not have Media Source Extensions (MSE) enabled.
+            // When the browser has built-in HLS support (check using `canPlayType`), we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video element through the `src` property.
+            // This is using the built-in support of the plain video element, without using hls.js.
+            // Note: it would be more normal to wait on the 'canplay' event below however on Safari (where you are most likely to find built-in HLS support) the video.src URL must be on the user-driven
+            // white-list before a 'canplay' event will be emitted; the last video event that can be reliably listened-for when the URL is not on the white-list is 'loadedmetadata'.
+            // else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            //     video.src = 'http://192.168.1.38/hls/live/index.m3u8';
+            //     video.addEventListener('loadedmetadata',function() {
+            //     video.play();
+            //     });
+            // }
+    </script>
+    </body>
+</html>

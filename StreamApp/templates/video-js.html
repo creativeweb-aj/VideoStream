@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <p><a href="{% url 'home' %}">Return to home</a></p> <br>
+
+        <video id="my-player" class="video-js" data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
+            <source src="http://192.168.1.38/hls/stream/index.m3u8" type="application/vnd.apple.mpegurl">
+        </video>
+            <script src="https://unpkg.com/video.js/dist/video.js"></script>
+            <script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.js"></script>
+
+            <script>
+                videojs('my-player', {
+                    controls: true,
+                    autoplay: false,
+                    preload: 'auto'
+                });     
+            </script>
+    </body>
+</html>

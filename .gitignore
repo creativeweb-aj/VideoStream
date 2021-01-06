@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+statics/streamOutput/
+statics/clappr-level-selector-plugin/
+media/
+
 # C extensions
 *.so
 
